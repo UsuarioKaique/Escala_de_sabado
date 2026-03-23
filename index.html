@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Escala de Sábados</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>📅 Escala de Folgas - Sábados</h1>
+
+    <div class="controls">
+      <label>Selecione o mês:</label>
+      <input type="month" id="mesSelecionado">
+      <button onclick="gerarEscala()">Gerar Escala</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Quem Folga</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaEscala"></tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
