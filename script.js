@@ -1,13 +1,12 @@
-const colaboradores = ["Cristian", "Kaique", "Renan"];
+const colaboradores = ["Cristian", "Renan", "Kaique"];
 
-// ordem inicial
-let ordemAtual = 0;
+const dataInicio = new Date(2026, 0, 3);
 
 function getFerias(mes) {
   return {
-    3: "Renan",   // Abril (0 = Jan)
-    5: "Cristian",// Junho
-    6: "Kaique"   // Julho
+    6: "Kaique",
+    5: "Cristian",
+    3: "Renan"   
   }[mes] || null;
 }
 
@@ -23,13 +22,16 @@ function gerarEscala() {
   let data = new Date(ano, mes - 1, 1);
   let ferias = getFerias(mes - 1);
 
-  let index = ordemAtual;
-
   while (data.getMonth() === mes - 1) {
-    if (data.getDay() === 6) { // sábado
+    if (data.getDay() === 6) { 
+
+      
+      let diffDias = Math.floor((data - dataInicio) / (1000 * 60 * 60 * 24));
+      let totalSabados = Math.floor(diffDias / 7);
+
       let disponiveis = colaboradores.filter(c => c !== ferias);
 
-      let pessoa = disponiveis[index % disponiveis.length];
+      let pessoa = disponiveis[totalSabados % disponiveis.length];
 
       let linha = `
         <tr>
@@ -39,7 +41,6 @@ function gerarEscala() {
       `;
 
       tabela.innerHTML += linha;
-      index++;
     }
 
     data.setDate(data.getDate() + 1);
