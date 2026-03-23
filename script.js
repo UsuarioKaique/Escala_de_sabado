@@ -2,12 +2,24 @@ const colaboradores = ["Cristian", "Renan", "Kaique"];
 
 const dataInicio = new Date(2026, 0, 3);
 
-function getFerias(mes) {
-  return {
-    6: "Kaique",
-    5: "Cristian",
-    3: "Renan"   
-  }[mes] || null;
+const ferias = {
+  "Cristian": {
+    inicio: new Date(2026, 5, 1), 
+    fim: new Date(2026, 6, 30)    
+  },
+  "Renan": {
+    inicio: new Date(2026, 3, 6), 
+    fim: new Date(2026, 4, 5)     
+  },
+  "Kaique": {
+    inicio: new Date(2026, 6, 1), 
+    fim: new Date(2026, 6, 30)    
+  }
+};
+
+function estaDeFerias(nome, data) {
+  if (!ferias[nome]) return false;
+  return data >= ferias[nome].inicio && data <= ferias[nome].fim;
 }
 
 function gerarEscala() {
@@ -20,23 +32,39 @@ function gerarEscala() {
   tabela.innerHTML = "";
 
   let data = new Date(ano, mes - 1, 1);
-  let ferias = getFerias(mes - 1);
+  
+  let ultimoFolguista = null;
 
   while (data.getMonth() === mes - 1) {
     if (data.getDay() === 6) { 
-
       
       let diffDias = Math.floor((data - dataInicio) / (1000 * 60 * 60 * 24));
       let totalSabados = Math.floor(diffDias / 7);
 
-      let disponiveis = colaboradores.filter(c => c !== ferias);
+      let pessoa = null;
+      let tentativas = 0;
+      let indiceRodizio = totalSabados % colaboradores.length;
 
-      let pessoa = disponiveis[totalSabados % disponiveis.length];
+      while (tentativas < colaboradores.length) {
+        let candidato = colaboradores[indiceRodizio];
+
+        
+        indiceRodizio = (indiceRodizio + 1) % colaboradores.length;
+        tentativas++;
+
+        
+        if (!estaDeFerias(candidato, data) && candidato !== ultimoFolguista) {
+          pessoa = candidato;
+          break;
+        }
+      }
+
+      ultimoFolguista = pessoa; 
 
       let linha = `
         <tr>
           <td>${data.toLocaleDateString("pt-BR")}</td>
-          <td>${pessoa}</td>
+          <td>${pessoa || "Cristian"}</td>
         </tr>
       `;
 
